@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Health Risk Classification Dashboard</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+</head>
+
+<body>
+    <div class="page-wrapper">
+
+        <header class="hero">
+            <div class="hero-icon">🩺</div>
+
+            <div>
+                <h1>Health Risk Classification</h1>
+                <p>Machine Learning Prediction Dashboard</p>
+            </div>
+        </header>
+
+        <main class="dashboard-grid">
+
+            <section class="card input-card">
+                <div class="card-heading">
+                    <span class="heading-icon">📋</span>
+                    <div>
+                        <h2>Enter Health Information</h2>
+                        <p>Provide the patient's basic health details.</p>
+                    </div>
+                </div>
+
+                {% if error %}
+                    <div class="error-message">
+                        {{ error }}
+                    </div>
+                {% endif %}
+
+                <form method="POST">
+
+                    <div class="form-group">
+                        <label for="age">Age</label>
+                        <input
+                            type="number"
+                            id="age"
+                            name="age"
+                            min="1"
+                            max="120"
+                            placeholder="Example: 40"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="glucose">Glucose Level</label>
+                        <input
+                            type="number"
+                            id="glucose"
+                            name="glucose"
+                            min="1"
+                            step="0.1"
+                            placeholder="Example: 135"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="blood_pressure">Blood Pressure</label>
+                        <input
+                            type="number"
+                            id="blood_pressure"
+                            name="blood_pressure"
+                            min="1"
+                            step="0.1"
+                            placeholder="Example: 86"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="bmi">BMI</label>
+                        <input
+                            type="number"
+                            id="bmi"
+                            name="bmi"
+                            min="1"
+                            step="0.1"
+                            placeholder="Example: 30"
+                            required
+                        >
+                    </div>
+
+                    <button type="submit">
+                        <span>🔍</span>
+                        Predict Health Risk
+                    </button>
+                </form>
+            </section>
+
+            <section class="card result-card">
+                <div class="card-heading">
+                    <span class="heading-icon">📊</span>
+                    <div>
+                        <h2>Prediction Result</h2>
+                        <p>View the machine learning prediction.</p>
+                    </div>
+                </div>
+
+                {% if prediction == "At Risk" %}
+
+                    <div class="prediction-box at-risk">
+                        <div class="prediction-icon">⚠️</div>
+                        <p class="prediction-label">Health Status</p>
+                        <h3>{{ prediction }}</h3>
+                        <p class="prediction-note">
+                            Please consider consulting a healthcare professional.
+                        </p>
+                    </div>
+
+                {% elif prediction == "Healthy" %}
+
+                    <div class="prediction-box healthy">
+                        <div class="prediction-icon">✅</div>
+                        <p class="prediction-label">Health Status</p>
+                        <h3>{{ prediction }}</h3>
+                        <p class="prediction-note">
+                            Continue maintaining a healthy lifestyle.
+                        </p>
+                    </div>
+
+                {% else %}
+
+                    <div class="empty-box">
+                        <div class="empty-icon">🩺</div>
+                        <h3>Waiting for Prediction</h3>
+                        <p>
+                            Enter the health information and click the
+                            prediction button.
+                        </p>
+                    </div>
+
+                {% endif %}
+
+                {% if input_data %}
+                    <div class="submitted-data">
+                        <h3>Submitted Information</h3>
+
+                        <div class="data-row">
+                            <span>Age</span>
+                            <strong>{{ input_data.age }}</strong>
+                        </div>
+
+                        <div class="data-row">
+                            <span>Glucose</span>
+                            <strong>{{ input_data.glucose }}</strong>
+                        </div>
+
+                        <div class="data-row">
+                            <span>Blood Pressure</span>
+                            <strong>{{ input_data.blood_pressure }}</strong>
+                        </div>
+
+                        <div class="data-row">
+                            <span>BMI</span>
+                            <strong>{{ input_data.bmi }}</strong>
+                        </div>
+                    </div>
+                {% endif %}
+            </section>
+        </main>
+
+        <section class="stats-section">
+            <div class="stat-card purple">
+                <span class="stat-icon">🤖</span>
+                <div>
+                    <p>Model</p>
+                    <h3>Decision Tree</h3>
+                </div>
+            </div>
+
+            <div class="stat-card blue">
+                <span class="stat-icon">🎯</span>
+                <div>
+                    <p>Model Accuracy</p>
+                    <h3>{{ "%.0f"|format(accuracy * 100) }}%</h3>
+                </div>
+            </div>
+
+            <div class="stat-card green">
+                <span class="stat-icon">🛡️</span>
+                <div>
+                    <p>Prediction Classes</p>
+                    <h3>2 Classes</h3>
+                </div>
+            </div>
+        </section>
+
+        <section class="notice">
+            <strong>Important Notice:</strong>
+            This project is for educational purposes only and is not a medical
+            diagnosis. Please consult a qualified healthcare professional for
+            medical advice.
+        </section>
+
+        <footer>
+            <p>Health Risk Classification Project | Machine Learning Dashboard</p>
+        </footer>
+
+    </div>
+</body>
+</html>
